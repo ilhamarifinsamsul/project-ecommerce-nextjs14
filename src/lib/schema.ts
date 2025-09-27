@@ -19,3 +19,17 @@ export const schemaSignUp = signInSchema.extend({
     .string({ message: "Name is required" })
     .min(3, { message: "Name must be at least 3 characters long" }),
 });
+
+// schema Category
+export const schemaCategory = z.object({
+  name: z
+    .string({ message: "Name is required" })
+    .min(3, { message: "Name must be at least 3 characters long" }),
+});
+
+// schema Location
+export const schemaLocation = z.object({
+  name: z
+    .string({ message: "Name is required" })
+    .min(3, { message: "Name must be at least 3 characters long" }),
+});
