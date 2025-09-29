@@ -33,3 +33,18 @@ export const schemaLocation = z.object({
     .string({ message: "Name is required" })
     .min(3, { message: "Name must be at least 3 characters long" }),
 });
+
+// schema Brands
+export const schemaBrand = z.object({
+  image: z
+    .any()
+    .refine((file: File) => ALLOW_MIME_TYPES.includes(file.type), {
+      message: "Invalid file type",
+    })
+    .refine((file: File) => file.size <= 3 * 1024 * 1024, {
+      message: "File size must be less than 3MB",
+    })
+    .refine((file: File) => file?.name, {
+      message: "File name is required",
+    }),
+});
