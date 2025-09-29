@@ -36,6 +36,10 @@ export const schemaLocation = z.object({
 
 // schema Brands
 export const schemaBrand = z.object({
+  name: z
+    .string({ message: "Name is required" })
+    .min(3, { message: "Name must be at least 3 characters long" }),
+
   image: z
     .any()
     .refine((file: File) => ALLOW_MIME_TYPES.includes(file.type), {
