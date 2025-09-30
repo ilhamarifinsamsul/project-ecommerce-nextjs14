@@ -38,15 +38,31 @@ export const uploadFile = async (
 };
 
 // delete file
+// export const deleteFile = async (
+//   fileName: string,
+//   path: "brands" | "products" = "brands"
+// ) => {
+//   const { error } = await supabase.storage
+//     .from("belanja")
+//     .remove([`public/${path}/${fileName}`]);
+
+//   if (error) {
+//     throw new Error(`Failed to delete file: ${error.message}`);
+//   }
+// };
+
 export const deleteFile = async (
   fileName: string,
   path: "brands" | "products" = "brands"
 ) => {
+  if (!fileName) return;
+
   const { error } = await supabase.storage
     .from("belanja")
     .remove([`public/${path}/${fileName}`]);
 
   if (error) {
+    console.error("Failed to delete file:", error.message);
     throw new Error(`Failed to delete file: ${error.message}`);
   }
 };

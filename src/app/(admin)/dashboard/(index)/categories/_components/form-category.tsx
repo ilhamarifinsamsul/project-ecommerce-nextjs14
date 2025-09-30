@@ -91,7 +91,6 @@ export default function FormCategory({
               </Button>
               <h1 className="text-xl font-semibold tracking-tight">Category</h1>
             </div>
-
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm">
                 Discard
@@ -99,6 +98,7 @@ export default function FormCategory({
               <SubmitButton />
             </div>
           </div>
+
           <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
             <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
               <Card x-chunk="dashboard-07-chunk-0" className="w-[500px]">

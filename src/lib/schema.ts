@@ -1,6 +1,11 @@
 import { z } from "zod";
 
-export const ALLOW_MIME_TYPES = ["image/jpeg", "image/png", "image/jpg"];
+export const ALLOW_MIME_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/jpg",
+  "image/webp",
+];
 
 // schema sign-in
 export const signInSchema = z.object({
@@ -51,4 +56,109 @@ export const schemaBrand = z.object({
     .refine((file: File) => file?.name, {
       message: "File name is required",
     }),
+});
+
+// // schema Product
+// export const schemaProduct = z.object({
+//   name: z
+//     .string({ message: "Name is required" })
+//     .min(5, { message: "Name must be at least 3 characters long" }),
+//   description: z
+//     .string({ message: "Description is required" })
+//     .min(10, { message: "Description must be at least 10 characters long" }),
+//   price: z.string({ message: "Price is required" }),
+//   stock: z.string({ message: "Stock is required" }),
+//   brand_id: z.string({ message: "Brand is required" }),
+//   category_id: z.string({ message: "Category is required" }),
+//   location_id: z.string({ message: "Location is required" }),
+//   image: z
+//     .any()
+//     .refine((files: File[]) => files.length > 3, {
+//       message: "You can only upload up to 3 images",
+//     })
+//     .refine(
+//       (files: File[]) => {
+//         let validate = false;
+
+//         Array.from(files).find((file) => {
+//           validate = ALLOW_MIME_TYPES.includes(file.type);
+//         });
+//         return validate;
+//       },
+//       {
+//         message: "Invalid file type",
+//       }
+//     ),
+// });
+
+// // schemaProductEdit
+// export const schemaProductEdit = schemaProduct
+//   .extend({
+//     id: z.number({ message: "ID is required" }),
+//   })
+//   .omit({ image: true });
+
+// schema Product
+export const schemaProduct = z.object({
+  name: z
+    .string({ message: "Name is required" })
+    .min(5, { message: "Name must be at least 5 characters long" }),
+  description: z
+    .string({ message: "Description is required" })
+    .min(10, { message: "Description must be at least 10 characters long" }),
+  price: z.string({ message: "Price is required" }),
+  stock: z.string({ message: "Stock is required" }),
+  brand_id: z.string({ message: "Brand is required" }),
+  category_id: z.string({ message: "Category is required" }),
+  location_id: z.string({ message: "Location is required" }),
+  image: z
+    .any()
+    .refine((files) => files && files.length > 0, {
+      message: "At least 1 image is required",
+    })
+    .refine((files) => files && files.length <= 3, {
+      message: "You can only upload up to 3 images",
+    })
+    .refine(
+      (files) =>
+        files &&
+        Array.from(files).every((file) =>
+          ALLOW_MIME_TYPES.includes((file as File).type)
+        ),
+      {
+        message: "Invalid file type",
+      }
+    ),
+});
+
+// schema Product Edit (image optional)
+export const schemaProductEdit = z.object({
+  id: z.number({ message: "ID is required" }),
+  name: z
+    .string({ message: "Name is required" })
+    .min(5, { message: "Name must be at least 5 characters long" }),
+  description: z
+    .string({ message: "Description is required" })
+    .min(10, { message: "Description must be at least 10 characters long" }),
+  price: z.string({ message: "Price is required" }),
+  stock: z.string({ message: "Stock is required" }),
+  brand_id: z.string({ message: "Brand is required" }),
+  category_id: z.string({ message: "Category is required" }),
+  location_id: z.string({ message: "Location is required" }),
+  image: z
+    .any()
+    .optional()
+    .refine((files) => !files || files.length <= 3, {
+      message: "You can only upload up to 3 images",
+    })
+    .refine(
+      (files) =>
+        !files ||
+        Array.from(files).every((file) =>
+          ALLOW_MIME_TYPES.includes((file as File).type)
+        ),
+      {
+        message: "Invalid file type",
+      }
+    ),
 });

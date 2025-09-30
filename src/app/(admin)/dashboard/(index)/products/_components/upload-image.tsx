@@ -1,0 +1,152 @@
+import React, { ChangeEvent, useRef, useEffect } from "react";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Upload } from "lucide-react";
+import Image from "next/image";
+import { getImageUrl } from "@/lib/supabase";
+
+// props default image
+interface UploadImageProps {
+  existingImages?: string[]; // Tambahkan prop untuk gambar yang sudah ada
+}
+
+export default function UploadImages({
+  existingImages = [],
+}: UploadImageProps) {
+  const ref = useRef<HTMLInputElement>(null);
+  const thumbnailRef = useRef<HTMLImageElement>(null);
+  const imagesFirstRef = useRef<HTMLImageElement>(null);
+  const imagesSecondRef = useRef<HTMLImageElement>(null);
+
+  // Effect untuk menampilkan gambar yang sudah ada saat komponen dimuat
+  useEffect(() => {
+    if (existingImages.length >= 3) {
+      if (thumbnailRef.current) {
+        thumbnailRef.current.src = getImageUrl(existingImages[0], "products");
+      }
+      if (imagesFirstRef.current) {
+        imagesFirstRef.current.src = getImageUrl(existingImages[1], "products");
+      }
+      if (imagesSecondRef.current) {
+        imagesSecondRef.current.src = getImageUrl(
+          existingImages[2],
+          "products"
+        );
+      }
+    } else if (existingImages.length > 0) {
+      // Fallback jika jumlah gambar kurang dari 3
+      if (thumbnailRef.current && existingImages[0]) {
+        thumbnailRef.current.src = getImageUrl(existingImages[0], "products");
+      }
+      if (imagesFirstRef.current && existingImages[1]) {
+        imagesFirstRef.current.src = getImageUrl(existingImages[1], "products");
+      }
+      if (imagesSecondRef.current && existingImages[2]) {
+        imagesSecondRef.current.src = getImageUrl(
+          existingImages[2],
+          "products"
+        );
+      }
+    }
+  }, [existingImages]);
+
+  const openFolder = () => {
+    if (ref.current) {
+      ref.current.click();
+    }
+  };
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.files);
+    if (
+      !thumbnailRef.current ||
+      !imagesFirstRef.current ||
+      !imagesSecondRef.current
+    ) {
+      return;
+    }
+
+    if (e.target.files && e.target.files.length >= 3) {
+      thumbnailRef.current.src = URL.createObjectURL(e.target.files[0]);
+      imagesFirstRef.current.src = URL.createObjectURL(e.target.files[1]);
+      imagesSecondRef.current.src = URL.createObjectURL(e.target.files[2]);
+    } else if (e.target.files && e.target.files.length > 0) {
+      // Handle jika kurang dari 3 gambar diupload
+      if (e.target.files[0]) {
+        thumbnailRef.current.src = URL.createObjectURL(e.target.files[0]);
+      }
+      if (e.target.files[1]) {
+        imagesFirstRef.current.src = URL.createObjectURL(e.target.files[1]);
+      }
+      if (e.target.files[2]) {
+        imagesSecondRef.current.src = URL.createObjectURL(e.target.files[2]);
+      }
+    }
+  };
+
+  return (
+    <Card className="overflow-hidden" x-chunk="dashboard-07-chunk-4">
+      <CardHeader>
+        <CardTitle>Product Images</CardTitle>
+        <CardDescription>Upload atau Edit gambar produk</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid gap-2">
+          <Image
+            alt="Product image"
+            className="aspect-square w-full rounded-md object-cover"
+            height="300"
+            src="/placeholder.svg"
+            width="300"
+            ref={thumbnailRef}
+          />
+          <div className="grid grid-cols-3 gap-2">
+            <button>
+              <Image
+                alt="Product image"
+                className="aspect-square w-full rounded-md object-cover"
+                height="84"
+                src="/placeholder.svg"
+                width="84"
+                ref={imagesFirstRef}
+              />
+            </button>
+            <button>
+              <Image
+                alt="Product image"
+                className="aspect-square w-full rounded-md object-cover"
+                height="84"
+                src="/placeholder.svg"
+                width="84"
+                ref={imagesSecondRef}
+              />
+            </button>
+            <button
+              type="button"
+              onClick={openFolder}
+              className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed"
+            >
+              <Upload className="h-4 w-4 text-muted-foreground" />
+              <span className="sr-only">Upload</span>
+            </button>
+            <input
+              ref={ref}
+              onChange={onChange}
+              type="file"
+              name="image"
+              className="hidden"
+              accept="image/*"
+              multiple
+            />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
