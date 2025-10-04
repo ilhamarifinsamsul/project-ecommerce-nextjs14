@@ -50,6 +50,26 @@ export async function getProducts() {
   }
 }
 
+// getBrands
+export async function getBrands() {
+  try {
+    const brands = await prisma.brand.findMany({
+      select: {
+        name: true,
+        logo: true,
+      },
+    });
+    //  mapping data
+    return brands.map((item) => ({
+      ...item,
+      image_url: getImageUrl(item.logo, "brands"),
+    }));
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
 // most picked product
 export async function getMostPickedProducts() {
   try {

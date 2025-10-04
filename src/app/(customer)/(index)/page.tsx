@@ -1,10 +1,10 @@
 import React, { Suspense } from "react";
 import Navbar from "./_components/navbar";
 import ListCategory from "./_components/list-category";
-// import ListProduct from "./_components/list-product";
-// import ListBrand from "./_components/list-brand";
+import ListProduct from "./_components/list-product";
+import ListBrand from "./_components/list-brand";
 import ListCategorySkeleton from "./_components/skeletons/ListCategorySkeleton";
-// import ListProductSkeleton from "./_components/skeletons/ListProductSkeleton";
+import ListProductSkeleton from "./_components/skeletons/ListProductSkeleton";
 
 export default function LandingPage() {
   return (
@@ -147,7 +147,7 @@ export default function LandingPage() {
         <Suspense fallback={<ListCategorySkeleton count={8} />}>
           <ListCategory />
         </Suspense>
-        {/* <Suspense fallback={<ListProductSkeleton count={5} />}>
+        <Suspense fallback={<ListProductSkeleton count={5} />}>
           <ListProduct
             title={
               <>
@@ -166,7 +166,7 @@ export default function LandingPage() {
             </>
           }
           type="new-release"
-        /> */}
+        />
       </section>
     </>
   );

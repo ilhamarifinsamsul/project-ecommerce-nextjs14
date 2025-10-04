@@ -6,7 +6,7 @@ export default async function Page() {
   const categories = await getCategories();
 
   return (
-    <div id="categories" className="flex flex-col gap-[30px]">
+    <div id="categories" className="flex flex-col gap-[30px] text-gray-700">
       <div className="flex items-center justify-between">
         <h2 className="font-bold text-2xl leading-[34px]">
           Browse Products <br /> by Categories
