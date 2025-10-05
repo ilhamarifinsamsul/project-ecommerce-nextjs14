@@ -16,12 +16,14 @@ export default async function ListProduct({ title, type }: ListProductProps) {
       : await getNewReleaseProducts();
 
   return (
-    <div id="picked" className="flex flex-col gap-[30px] text-gray-700">
+    <div id="picked" className="flex flex-col gap-[30px]">
       <div className="flex items-center justify-between">
-        <h2 className="font-bold text-2xl leading-[34px]">{title}</h2>
+        <h2 className="font-bold text-2xl leading-[34px] text-gray-700">
+          {title}
+        </h2>
         <a
           href="/"
-          className="p-[12px_24px] border border-[#E5E5E5] rounded-full font-semibold"
+          className="p-[12px_24px] border border-[#E5E5E5] rounded-full font-semibold text-gray-700"
         >
           Explore All
         </a>
@@ -33,7 +35,7 @@ export default async function ListProduct({ title, type }: ListProductProps) {
             className="product-card"
             key={product.name + product.id}
           >
-            <div className="bg-white flex flex-col gap-[24px] p-5 rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
+            <div className="bg-white flex flex-col gap-[24px] p-5 rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full text-gray-700">
               <div className="w-full h-[90px] flex shrink-0 items-center justify-center overflow-hidden">
                 <img
                   src={product.image_url}
@@ -43,12 +45,10 @@ export default async function ListProduct({ title, type }: ListProductProps) {
               </div>
               <div className="flex flex-col gap-[10px]">
                 <div className="flex flex-col gap-1">
-                  <p className="font-semibold leading-[22px]">
+                  <p className="font-semibold leading-[22px] text-gray-700">
                     {product.category.name}
                   </p>
-                  <p className="text-sm text-[#616369] text-gray-600">
-                    {product.name}
-                  </p>
+                  <p className="text-sm text-gray-600">{product.name}</p>
                 </div>
                 <p className="font-semibold text-[#0D5CD7] leading-[22px]">
                   {rupiah(Number(product.price))}

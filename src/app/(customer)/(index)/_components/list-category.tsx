@@ -6,8 +6,8 @@ export default async function Page() {
   const categories = await getCategories();
 
   return (
-    <div id="categories" className="flex flex-col gap-[30px] text-gray-700">
-      <div className="flex items-center justify-between">
+    <div id="categories" className="flex flex-col gap-[30px]">
+      <div className="flex items-center justify-between text-gray-700">
         <h2 className="font-bold text-2xl leading-[34px]">
           Browse Products <br /> by Categories
         </h2>
@@ -18,7 +18,7 @@ export default async function Page() {
           Explore All
         </a>
       </div>
-      <div className="grid grid-cols-4 gap-[30px]">
+      <div className="grid grid-cols-4 gap-[30px] text-gray-700">
         {/* Mapping Categories */}
         {categories.map((category) => (
           <Link

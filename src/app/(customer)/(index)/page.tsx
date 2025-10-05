@@ -12,7 +12,7 @@ export default function LandingPage() {
       <header className="bg-[#EFF3FA] pt-[30px] pb-[50px]">
         <Navbar />
         <div className="container max-w-[1130px] mx-auto flex items-center justify-between gap-1 mt-[50px] text-gray-700">
-          <div className="flex flex-col gap-[30px]">
+          <div className="flex flex-col gap-[30px] text-gray-700">
             <div className="flex items-center gap-[10px] p-[8px_16px] rounded-full bg-white w-fit">
               <div className="w-[22px] h-[22px] flex shrink-0">
                 <img src="assets/icons/crown.svg" alt="icon" />
