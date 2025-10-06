@@ -1,5 +1,6 @@
 import { getBrands } from "@/app/(admin)/dashboard/(index)/brands/lib/data";
 import React from "react";
+import FilterCheckboxItem from "./filter-checkbox-item";
 
 export default async function FilterBrand() {
   const brands = await getBrands();
@@ -7,19 +8,25 @@ export default async function FilterBrand() {
     <div className="flex flex-col gap-[14px]">
       <p className="font-semibold leading-[22px]">Brands</p>
       {brands.map((brand) => (
-        <label
-          key={`${brand.id + brand.name}`}
-          className="font-semibold flex items-center gap-3"
-          htmlFor={`${brand.id + brand.name}`}
-        >
-          <input
-            type="checkbox"
-            name="brand"
-            value={brand.id}
-            className="w-6 h-6 flex shrink-0 appearance-none checked:border-[3px] checked:border-solid checked:border-white rounded-md checked:bg-[#0D5CD7] ring-1 ring-[#0D5CD7]"
-          />
-          <span>{brand.name}</span>
-        </label>
+        // <label
+        //   key={`${brand.id + brand.name}`}
+        //   className="font-semibold flex items-center gap-3"
+        //   htmlFor={`${brand.id + brand.name}`}
+        // >
+        //   <input
+        //     type="checkbox"
+        //     name="brand"
+        //     value={brand.id}
+        //     className="w-6 h-6 flex shrink-0 appearance-none checked:border-[3px] checked:border-solid checked:border-white rounded-md checked:bg-[#0D5CD7] ring-1 ring-[#0D5CD7]"
+        //   />
+        //   <span>{brand.name}</span>
+        // </label>
+        <FilterCheckboxItem
+          key={brand.id + brand.name}
+          id={brand.id.toString()}
+          value={brand.name}
+          type="brand"
+        />
       ))}
     </div>
   );
