@@ -1,6 +1,30 @@
-import React from "react";
+"use client";
+
+import { useFilter } from "@/hooks/useFilter";
+import React, { useEffect, useState } from "react";
 
 export default function FilterPrice() {
+  const { setFilter } = useFilter();
+  // buat state
+  const [minPrice, setMinPrice] = useState<number>(0);
+  const [maxPrice, setMaxPrice] = useState<number>(0);
+
+  useEffect(() => {
+    const debaounceInput = setTimeout(() => {
+      setFilter({ minPrice: minPrice });
+    }, 1000);
+
+    return () => clearTimeout(debaounceInput);
+  }, [minPrice]);
+
+  useEffect(() => {
+    const debaounceInput = setTimeout(() => {
+      setFilter({ maxPrice: maxPrice });
+    }, 1000);
+
+    return () => clearTimeout(debaounceInput);
+  }, [maxPrice]);
+
   return (
     <div className="flex flex-col gap-[14px]">
       <p className="font-semibold leading-[22px]">Range Harga</p>
@@ -14,6 +38,7 @@ export default function FilterPrice() {
           name=""
           className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-gray-700 bg-white"
           placeholder="Minimum price"
+          onChange={(e) => setMinPrice(Number.parseInt(e.target.value))}
         />
       </div>
       <div className="max-w-[480px] w-full bg-white flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
@@ -26,6 +51,7 @@ export default function FilterPrice() {
           name=""
           className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-gray-700 bg-white"
           placeholder="Maximum price"
+          onChange={(e) => setMaxPrice(Number.parseInt(e.target.value))}
         />
       </div>
     </div>

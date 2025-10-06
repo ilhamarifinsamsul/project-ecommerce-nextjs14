@@ -1,6 +1,20 @@
-import React from "react";
+"use client";
+
+import { useFilter } from "@/hooks/useFilter";
+import React, { useEffect, useState } from "react";
 
 export default function SearchBar() {
+  const { setFilter } = useFilter();
+  // buat state
+  const [query, setQuery] = useState<string>("");
+
+  useEffect(() => {
+    const debaounceInput = setTimeout(() => {
+      setFilter({ search: query });
+    }, 1000);
+
+    return () => clearTimeout(debaounceInput);
+  }, [query]);
   return (
     <>
       <div
@@ -33,6 +47,7 @@ export default function SearchBar() {
             name=""
             className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-gray-700 bg-white"
             placeholder="Search product by name, brand, category"
+            onChange={(e) => setQuery(e.target.value)}
           />
           <button type="submit" className="flex shrink-0">
             <img src="assets/icons/search-normal.svg" alt="icon" />
