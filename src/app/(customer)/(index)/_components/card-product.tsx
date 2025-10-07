@@ -1,15 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { rupiah } from "@/lib/utils";
-
-// add tyoe product
-type TProduct = {
-  id: number;
-  name: string;
-  image_url: string;
-  price: number;
-  category_name: string;
-};
+import { TProduct } from "@/types";
 
 // interface untuk card product
 interface CardProductProps {
