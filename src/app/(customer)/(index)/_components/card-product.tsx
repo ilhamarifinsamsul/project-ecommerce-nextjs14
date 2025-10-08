@@ -10,7 +10,11 @@ interface CardProductProps {
 
 export default function CardProduct({ product }: CardProductProps) {
   return (
-    <Link href={"#"} className="product-card" key={product.name + product.id}>
+    <Link
+      href={`/detail-product/${product.id}`}
+      className="product-card"
+      key={product.name + product.id}
+    >
       <div className="bg-white flex flex-col gap-[24px] p-5 rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full text-gray-700">
         <div className="w-full h-[90px] flex shrink-0 items-center justify-center overflow-hidden">
           <img

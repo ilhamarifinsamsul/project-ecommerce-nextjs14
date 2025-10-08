@@ -7,9 +7,14 @@ import CardProduct from "./card-product";
 interface ListProductProps {
   title: ReactNode;
   type: "most-picked" | "new-release";
+  isShowDetail?: boolean;
 }
 
-export default async function ListProduct({ title, type }: ListProductProps) {
+export default async function ListProduct({
+  title,
+  type,
+  isShowDetail = true,
+}: ListProductProps) {
   const product =
     type === "most-picked"
       ? await getMostPickedProducts()
@@ -21,12 +26,14 @@ export default async function ListProduct({ title, type }: ListProductProps) {
         <h2 className="font-bold text-2xl leading-[34px] text-gray-700">
           {title}
         </h2>
-        <a
-          href="/"
-          className="p-[12px_24px] border border-[#E5E5E5] rounded-full font-semibold text-gray-700"
-        >
-          Explore All
-        </a>
+        {isShowDetail && (
+          <a
+            href="/"
+            className="p-[12px_24px] border border-[#E5E5E5] rounded-full font-semibold text-gray-700"
+          >
+            Explore All
+          </a>
+        )}
       </div>
       <div className="grid grid-cols-5 gap-[30px]">
         {product.map((product) => (
