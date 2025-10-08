@@ -19,3 +19,7 @@ export type TProduct = {
   price: number;
   category_name: string;
 };
+
+export type TCart = TProduct & {
+  quantity: number;
+};
