@@ -162,3 +162,23 @@ export const schemaProductEdit = z.object({
       }
     ),
 });
+
+// schema shipping address
+export const schemaShippingAddress = z.object({
+  name: z.string({ message: "Name is required" }).min(3, {
+    message: "Name must be at least 3 characters long",
+  }),
+  address: z.string({ message: "Address is required" }).min(3, {
+    message: "Address must be at least 3 characters long",
+  }),
+  city: z.string({ message: "city is required" }).min(3, {
+    message: "city must be at least 3 characters long",
+  }),
+  postal_code: z.string({ message: "postal code is required" }).min(3, {
+    message: "postal code must be at least 3 characters long",
+  }),
+  notes: z.string().nullable(),
+  phone: z.string({ message: "phone is required" }).min(3, {
+    message: "phone must be at least 3 characters long",
+  }),
+});

@@ -1,12 +1,73 @@
 "use client";
 
-import React from "react";
+import { useCart } from "@/hooks/useCart";
+import { rupiah } from "@/lib/utils";
+import React, { useMemo } from "react";
+import { useFormState } from "react-dom";
+import { StoreOrder } from "../lib/actions";
+import { ActionResult } from "@/types";
+import { useFormStatus } from "react-dom";
+
+// initialState
+const initialState: ActionResult = {
+  error: "",
+  success: "",
+};
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      className="p-[12px_24px] bg-[#0D5CD7] rounded-full text-center font-semibold text-white disabled:opacity-60"
+      disabled={pending}
+    >
+      {pending ? "Processing..." : "Checkout with Xendit"}
+    </button>
+  );
+}
 
 export default function CheckoutForm() {
+  const { products } = useCart();
+
+  // Kalkulasi subtotal
+  const subTotal = useMemo(() => {
+    return products.reduce(
+      (prev, curr) => prev + curr.price * curr.quantity,
+      0
+    );
+  }, [products]);
+
+  // Kalkulasi Insurance 12%
+  const insurance = useMemo(() => {
+    return subTotal * 0.12;
+  }, [subTotal]);
+
+  // Flat shipping
+  const shipping = 200000;
+
+  // Warranty (free)
+  const warranty = 0;
+
+  // PPN 11%
+  const ppn = useMemo(() => {
+    return subTotal * 0.11;
+  }, [subTotal]);
+
+  // Grand Total
+  const grandTotal = useMemo(() => {
+    return subTotal + insurance + shipping + warranty + ppn;
+  }, [subTotal, insurance, ppn]);
+
+  // state
+  const storeOrderParams = (_: unknown, formData: FormData) =>
+    StoreOrder(_, formData, grandTotal, products);
+  const [state, formAction] = useFormState(storeOrderParams, initialState);
+
   return (
     <>
       <form
-        action=""
+        action={formAction}
         id="checkout-info"
         className="container max-w-[1130px] mx-auto flex justify-between gap-5 mt-[50px] pb-[100px] text-gray-800"
       >
@@ -21,10 +82,11 @@ export default function CheckoutForm() {
               </div>
               <input
                 type="text"
-                id=""
-                name=""
+                id="name"
+                name="name"
                 className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-gray-800 bg-transparent"
                 placeholder="Write your real complete name"
+                required
               />
             </div>
             <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
@@ -33,10 +95,11 @@ export default function CheckoutForm() {
               </div>
               <input
                 type="text"
-                id=""
-                name=""
+                id="address"
+                name="address"
                 className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-gray-800 bg-transparent"
                 placeholder="Write your active house address"
+                required
               />
             </div>
             <div className="flex items-center gap-[30px]">
@@ -46,10 +109,11 @@ export default function CheckoutForm() {
                 </div>
                 <input
                   type="text"
-                  id=""
-                  name=""
+                  id="city"
+                  name="city"
                   className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-gray-800 bg-transparent"
                   placeholder="City"
+                  required
                 />
               </div>
               <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
@@ -58,39 +122,42 @@ export default function CheckoutForm() {
                 </div>
                 <input
                   type="number"
-                  id=""
-                  name=""
+                  id="postal_code"
+                  name="postal_code"
                   className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-gray-800 bg-transparent"
                   placeholder="Post code"
+                  required
                 />
               </div>
             </div>
             <div className="flex items-start gap-[10px] rounded-[20px] border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
               <div className="flex shrink-0">
-                <img src="assets/icons/note.svg" alt="icon" />{" "}
+                <img src="assets/icons/note.svg" alt="icon" />
               </div>
               <textarea
-                name=""
-                id=""
+                name="notes"
+                id="notes"
                 className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-gray-800 bg-transparent resize-none"
-                rows="6"
+                rows={6}
                 placeholder="Additional notes for courier"
               ></textarea>
             </div>
             <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
               <div className="flex shrink-0">
-                <img src="assets/icons/call.svg" alt="icon" />{" "}
+                <img src="assets/icons/call.svg" alt="icon" />
               </div>
               <input
                 type="tel"
-                id=""
-                name=""
+                id="phone"
+                name="phone"
                 className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-gray-800 bg-transparent"
                 placeholder="Write your phone number or whatsapp"
+                required
               />
             </div>
           </div>
         </div>
+
         <div className="flex flex-1 flex-col shrink-0 gap-4 h-fit">
           <h2 className="font-bold text-2xl leading-[34px]">Payment Details</h2>
           <div className="w-full bg-white border border-[#E5E5E5] flex flex-col gap-[30px] p-[30px] rounded-3xl">
@@ -98,11 +165,11 @@ export default function CheckoutForm() {
               <div className="w-full bg-white border border-[#E5E5E5] flex items-center justify-between gap-2 p-5 rounded-3xl">
                 <div className="flex items-center gap-[10px]">
                   <div className="w-12 h-12 flex shrink-0 rounded-full bg-[#FFC736] items-center justify-center overflow-hidden">
-                    <img src="assets/icons/cake.svg" alt="icon" />{" "}
+                    <img src="assets/icons/cake.svg" alt="icon" />
                   </div>
                   <div className="flex flex-col gap-[2px]">
-                    <p className="font-semibold">100% It's Original</p>
-                    <p className="text-sm">We don't sell fake products</p>
+                    <p className="font-semibold">100% Its Original</p>
+                    <p className="text-sm">We dont sell fake products</p>
                   </div>
                 </div>
                 <div className="flex shrink-0">
@@ -110,6 +177,7 @@ export default function CheckoutForm() {
                 </div>
               </div>
             </a>
+
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -118,7 +186,7 @@ export default function CheckoutForm() {
                   </div>
                   <p>Sub Total</p>
                 </div>
-                <p className="font-semibold">Rp 50.000.000</p>
+                <p className="font-semibold">{rupiah(subTotal)}</p>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -127,7 +195,7 @@ export default function CheckoutForm() {
                   </div>
                   <p>Insurance 12%</p>
                 </div>
-                <p className="font-semibold">Rp 18.389.492</p>
+                <p className="font-semibold">{rupiah(insurance)}</p>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -136,7 +204,7 @@ export default function CheckoutForm() {
                   </div>
                   <p>Shipping (Flat)</p>
                 </div>
-                <p className="font-semibold">Rp 200.000</p>
+                <p className="font-semibold">{rupiah(shipping)}</p>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -145,7 +213,7 @@ export default function CheckoutForm() {
                   </div>
                   <p>Warranty Original</p>
                 </div>
-                <p className="font-semibold">Rp 0</p>
+                <p className="font-semibold">{rupiah(warranty)}</p>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -154,22 +222,25 @@ export default function CheckoutForm() {
                   </div>
                   <p>PPN 11%</p>
                 </div>
-                <p className="font-semibold">Rp 123.489.333</p>
+                <p className="font-semibold">{rupiah(ppn)}</p>
               </div>
             </div>
+
             <div className="flex flex-col gap-1">
               <p className="font-semibold">Grand Total</p>
               <p className="font-bold text-[32px] leading-[48px] underline text-[#0D5CD7]">
-                Rp 18.498.492.444
+                {rupiah(grandTotal)}
               </p>
             </div>
+
+            {state?.error && (
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-600 text-sm">{state.error}</p>
+              </div>
+            )}
+
             <div className="flex flex-col gap-3">
-              <a
-                href=""
-                className="p-[12px_24px] bg-[#0D5CD7] rounded-full text-center font-semibold text-white"
-              >
-                Checkout Now
-              </a>
+              <SubmitButton />
               <a
                 href=""
                 className="p-[12px_24px] bg-white rounded-full text-center font-semibold border border-[#E5E5E5]"
