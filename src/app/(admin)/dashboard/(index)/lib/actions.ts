@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 
 export default async function Logout(
   _: unknown,
-  formData: FormData
+  _formData: FormData
 ): Promise<ActionResult> {
   console.log("logout");
 

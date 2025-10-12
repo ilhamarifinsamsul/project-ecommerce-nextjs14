@@ -81,7 +81,7 @@ export async function updateCategory(
 export async function deleteCategory(
   _: unknown,
   id: number | undefined,
-  formData: FormData
+  _formData: FormData
 ): Promise<ActionResult> {
   if (!id === undefined) {
     return {

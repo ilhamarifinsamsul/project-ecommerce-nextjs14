@@ -16,7 +16,7 @@ const initialState: ActionResult = {
 };
 
 export default function FormLogout() {
-  const [state, formAction] = useFormState(Logout, initialState);
+  const [_state, formAction] = useFormState(Logout, initialState);
 
   return (
     <nav className="mt-auto flex flex-col items-center gap-4 px-4 sm:py-5">

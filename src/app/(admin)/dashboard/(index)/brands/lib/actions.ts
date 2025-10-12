@@ -95,7 +95,7 @@ export async function updateBrand(
 export async function deleteBrand(
   _: unknown,
   id: number | undefined,
-  formData: FormData
+  _formData: FormData
 ): Promise<ActionResult> {
   if (!id === undefined) {
     return {

@@ -84,7 +84,7 @@ export async function updateLocation(
 export async function deleteLocation(
   _: unknown,
   id: number | undefined,
-  formData: FormData
+  _formData: FormData
 ) {
   if (!id === undefined) {
     return {

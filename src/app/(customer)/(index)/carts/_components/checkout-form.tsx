@@ -16,14 +16,17 @@ const initialState: ActionResult = {
 
 function SubmitButton() {
   const { pending } = useFormStatus();
+
   return (
-    <button
-      type="submit"
-      className="p-[12px_24px] bg-[#0D5CD7] rounded-full text-center font-semibold text-white disabled:opacity-60"
-      disabled={pending}
-    >
-      {pending ? "Processing..." : "Checkout with Xendit"}
-    </button>
+    <div className="flex flex-col gap-2">
+      <button
+        type="submit"
+        className="p-[12px_24px] bg-[#0D5CD7] rounded-full text-center font-semibold text-white disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+        disabled={pending}
+      >
+        {pending ? "Processing..." : "Checkout with Xendit"}
+      </button>
+    </div>
   );
 }
 
@@ -44,7 +47,7 @@ export default function CheckoutForm() {
   }, [subTotal]);
 
   // Flat shipping
-  const shipping = 200000;
+  const shipping = 0;
 
   // Warranty (free)
   const warranty = 0;
@@ -243,7 +246,7 @@ export default function CheckoutForm() {
               <SubmitButton />
               <a
                 href=""
-                className="p-[12px_24px] bg-white rounded-full text-center font-semibold border border-[#E5E5E5]"
+                className="p-[12px_24px] bg-white rounded-full text-center font-semibold border border-[#E5E5E5] hover:border-gray-300 transition-all"
               >
                 Contact Sales
               </a>
