@@ -37,4 +37,5 @@ next-env.d.ts
 
 /src/generated/prisma
 
-
+# Ignore all files in public
+/public/*
