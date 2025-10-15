@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { ActionResult } from "@/types";
 import prisma from "../../../../../lib/prisma";
 import { schemaSignUp, signInSchema } from "@/lib/schema";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { lucia } from "@/lib/auth";
 import { cookies } from "next/headers";
 
