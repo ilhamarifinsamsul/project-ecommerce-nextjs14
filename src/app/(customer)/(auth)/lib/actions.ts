@@ -13,7 +13,55 @@ export default async function SignIn(
   _: unknown,
   formData: FormData
 ): Promise<ActionResult> {
-  // validasi
+  // // validasi
+  // const validate = signInSchema.safeParse({
+  //   email: formData.get("email"),
+  //   password: formData.get("password"),
+  // });
+
+  // if (!validate.success) {
+  //   return {
+  //     error: validate.error.issues[0].message,
+  //   };
+  // }
+
+  // //   cari user di database
+  // const existingUser = await prisma.user.findFirst({
+  //   where: {
+  //     email: validate.data.email,
+  //     role: "customer",
+  //   },
+  // });
+
+  // if (!existingUser) {
+  //   return {
+  //     error: "User not found",
+  //   };
+  // }
+  // //   cek/bandingkan password
+  // const isPasswordValid = await bcrypt.compare(
+  //   validate.data.password,
+  //   existingUser.password
+  // );
+
+  // if (!isPasswordValid) {
+  //   return {
+  //     error: "Invalid password",
+  //   };
+  // }
+
+  // //   Buat session pakai lucia
+  // const session = await lucia.createSession(existingUser.id, {});
+  // const sessionCookie = lucia.createSessionCookie(session.id);
+
+  // (await cookies()).set(
+  //   sessionCookie.name,
+  //   sessionCookie.value,
+  //   sessionCookie.attributes
+  // );
+  // //   redirect jika sukses
+  // redirect("/");
+
   const validate = signInSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -25,42 +73,50 @@ export default async function SignIn(
     };
   }
 
-  //   cari user di database
-  const existingUser = await prisma.user.findFirst({
-    where: {
-      email: validate.data.email,
-      role: "customer",
-    },
-  });
+  try {
+    // Cari user di database
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        email: validate.data.email,
+        role: "customer",
+      },
+    });
 
-  if (!existingUser) {
+    if (!existingUser) {
+      return {
+        error: "Invalid email or password", // Lebih secure
+      };
+    }
+
+    // Cek password
+    const isPasswordValid = await bcrypt.compare(
+      validate.data.password,
+      existingUser.password
+    );
+
+    if (!isPasswordValid) {
+      return {
+        error: "Invalid email or password",
+      };
+    }
+
+    // Buat session
+    const session = await lucia.createSession(existingUser.id, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+
+    (await cookies()).set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes
+    );
+
+    return redirect("/");
+  } catch (error) {
+    console.error("Sign in error:", error);
     return {
-      error: "User not found",
+      error: "Something went wrong. Please try again.",
     };
   }
-  //   cek/bandingkan password
-  const isPasswordValid = await bcrypt.compare(
-    validate.data.password,
-    existingUser.password
-  );
-
-  if (!isPasswordValid) {
-    return {
-      error: "Invalid password",
-    };
-  }
-
-  //   Buat session pakai lucia
-  const session = await lucia.createSession(existingUser.id, {});
-  const sessionCookie = lucia.createSessionCookie(session.id);
-
-  (await cookies()).set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  );
-  //   redirect jika sukses
-  redirect("/");
 }
 
 // function untuk sign-up
@@ -82,7 +138,7 @@ export async function SignUp(
   }
 
   //   hash password
-  const hashedPassword = await bcrypt.hashSync(validate.data.password, 10);
+  const hashedPassword = await bcrypt.hash(validate.data.password, 10);
 
   //   buat user di database
   try {
