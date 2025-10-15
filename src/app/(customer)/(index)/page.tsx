@@ -66,7 +66,7 @@ export default function LandingPage() {
             <div className="absolute right-0 top-[30%] bg-white p-[14px_16px] rounded-3xl flex flex-col items-center gap-[10px] text-gray-700">
               <div className="w-12 h-12 flex shrink-0 rounded-full items-center justify-center bg-[#FFC736] overflow-hidden">
                 <img
-                  src="assets/icons/star-outline.svg"
+                  src="/assets/icons/star-outline.svg"
                   className="w-6 h-6"
                   alt="icon"
                 />
@@ -96,7 +96,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-[10px] text-gray-700">
             <div className="w-[50px] h-[50px] flex shrink-0 rounded-full border-[5px] border-white overflow-hidden">
               <img
-                src="assets/photos/p2.png"
+                src="/assets/photos/p2.png"
                 className="w-full h-full object-cover"
                 alt="photo"
               />
