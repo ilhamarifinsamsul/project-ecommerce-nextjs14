@@ -13,55 +13,6 @@ export default async function SignIn(
   _: unknown,
   formData: FormData
 ): Promise<ActionResult> {
-  // // validasi
-  // const validate = signInSchema.safeParse({
-  //   email: formData.get("email"),
-  //   password: formData.get("password"),
-  // });
-
-  // if (!validate.success) {
-  //   return {
-  //     error: validate.error.issues[0].message,
-  //   };
-  // }
-
-  // //   cari user di database
-  // const existingUser = await prisma.user.findFirst({
-  //   where: {
-  //     email: validate.data.email,
-  //     role: "customer",
-  //   },
-  // });
-
-  // if (!existingUser) {
-  //   return {
-  //     error: "User not found",
-  //   };
-  // }
-  // //   cek/bandingkan password
-  // const isPasswordValid = await bcrypt.compare(
-  //   validate.data.password,
-  //   existingUser.password
-  // );
-
-  // if (!isPasswordValid) {
-  //   return {
-  //     error: "Invalid password",
-  //   };
-  // }
-
-  // //   Buat session pakai lucia
-  // const session = await lucia.createSession(existingUser.id, {});
-  // const sessionCookie = lucia.createSessionCookie(session.id);
-
-  // (await cookies()).set(
-  //   sessionCookie.name,
-  //   sessionCookie.value,
-  //   sessionCookie.attributes
-  // );
-  // //   redirect jika sukses
-  // redirect("/");
-
   const validate = signInSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -159,4 +110,18 @@ export async function SignUp(
   return redirect(
     "/sign-in?success=Account created successfully, please login"
   );
+}
+
+// function untuk logout
+export async function Logout() {
+  const cookieStore = await cookies();
+  const sessionId = cookieStore.get(lucia.sessionCookieName)?.value;
+
+  if (!sessionId) {
+    return redirect("/");
+  }
+
+  await lucia.invalidateSession(sessionId);
+  cookieStore.delete(lucia.sessionCookieName);
+  return redirect("/");
 }

@@ -1,5 +1,12 @@
 import { getUser } from "@/lib/auth";
 import Link from "next/link";
+import { Logout } from "../../(auth)/lib/actions";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default async function Navbar() {
   const { session, user } = await getUser();
@@ -32,13 +39,27 @@ export default async function Navbar() {
         {session && user.role === "customer" ? (
           <div className="flex items-center gap-3">
             <p className="text-white">Hi, {user.name}</p>
-            <div className="w-[48px] h-[48px] flex shrink-0 rounded-full p-1 border border-[#E5E5E5] overflow-hidden">
-              <img
-                src="/assets/photos/p4.png"
-                className="w-full h-full object-cover rounded-full"
-                alt="photo"
-              />
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="w-[48px] h-[48px] flex shrink-0 rounded-full p-1 border border-[#E5E5E5] overflow-hidden">
+                  <img
+                    src="/assets/photos/p4.png"
+                    className="w-full h-full object-cover rounded-full"
+                    alt="photo"
+                  />
+                </button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <form action={Logout}>
+                    <button type="submit" className="w-full text-left">
+                      Logout
+                    </button>
+                  </form>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         ) : (
           <div className="flex gap-3">
