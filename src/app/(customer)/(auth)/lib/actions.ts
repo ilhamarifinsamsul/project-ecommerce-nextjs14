@@ -61,7 +61,7 @@ export async function SignIn(
       sessionCookie.attributes
     );
 
-    return redirect("/");
+    return { success: "Signed in successfully", error: "" };
   } catch (error) {
     console.error("Sign in error:", error);
     return {

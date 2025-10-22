@@ -6,7 +6,7 @@ import { ActionResult } from "@/types";
 import { useFormState, useFormStatus } from "react-dom";
 import { SignIn } from "../lib/actions";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 
 // initiaState
@@ -31,8 +31,16 @@ function SubmitButton() {
 
 export default function SignInPage() {
   const [state, formAction] = useFormState(SignIn, initialFormState);
+
   //   initialisasi router
   const searchParams = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!state.error && state.success !== "") {
+      router.push("/"); // ⬅️ redirect manual
+    }
+  }, [state, router]);
 
   //   Local state untuk kontrol visibilitas error
   const [errorMessage, setErrorMessage] = useState("");
