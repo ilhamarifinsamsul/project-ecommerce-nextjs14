@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from "react";
 import { ActionResult } from "@/types";
 import { useFormState, useFormStatus } from "react-dom";
-import SignIn from "../lib/actions";
+import { SignIn } from "../lib/actions";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";

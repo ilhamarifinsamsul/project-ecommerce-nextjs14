@@ -9,7 +9,7 @@ import bcrypt from "bcryptjs";
 import { lucia } from "@/lib/auth";
 import { cookies } from "next/headers";
 
-export default async function SignIn(
+export async function SignIn(
   _: unknown,
   formData: FormData
 ): Promise<ActionResult> {
